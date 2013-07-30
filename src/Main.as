@@ -102,7 +102,7 @@ package
 			var box_x:int = 400;
 			var box_y:int = 40;
 			var box_width:int = 100;
-			var box_height:int = 40;
+			var box_height:int = 10;
 			var material:Material = new Material(0.5);
 
 			//
@@ -111,12 +111,12 @@ package
 			//_body_1.userData = "Circle body";
 			_body_1.space =  space;
 
-			_body_2 = new Body(BodyType.DYNAMIC , new Vec2(box_x - 30, box_y + 25));
+			_body_2 = new Body(BodyType.DYNAMIC , new Vec2(box_x - 40, box_y));
 			_body_2.shapes.add(new Circle(circle_radius, null, material));
 			//_body_2.userData = "Polygon body";
 			_body_2.space = space;
 
-			_body_3 = new Body(BodyType.DYNAMIC , new Vec2(box_y - 30, box_y + 25));
+			_body_3 = new Body(BodyType.DYNAMIC , new Vec2(box_y - 40, box_y));
 			_body_3.shapes.add(new Circle(circle_radius, null, material));
 			//_body_2.userData = "Polygon body";
 			_body_3.space = space;
@@ -128,16 +128,16 @@ package
 			var anchorBody_1:Vec2;
 			var anchorBody_2:Vec2;
 			
-			anchorBody_1 = new Vec2(_body_1.localCOM.x - 30, _body_1.localCOM.y + 15);
-			anchorBody_2 = new Vec2(_body_2.localCOM.x, _body_2.localCOM.y - 10);
+			anchorBody_1 = new Vec2(_body_1.localCOM.x - 40, _body_1.localCOM.y);
+			anchorBody_2 = new Vec2(_body_2.localCOM.x, _body_2.localCOM.y);
 			pivotJoint1 = new PivotJoint(_body_1, _body_2, anchorBody_1, anchorBody_2);
-			//pivotJoint1.ignore = true;
+			pivotJoint1.ignore = true;
 			pivotJoint1.space = space;
 			
-			anchorBody_1 = new Vec2(_body_1.localCOM.x + 30, _body_1.localCOM.y + 15);
-			anchorBody_2 = new Vec2(_body_3.localCOM.x, _body_3.localCOM.y - 10);
+			anchorBody_1 = new Vec2(_body_1.localCOM.x + 40, _body_1.localCOM.y);
+			anchorBody_2 = new Vec2(_body_3.localCOM.x, _body_3.localCOM.y);
 			pivotJoint2 = new PivotJoint(_body_1, _body_3, anchorBody_1, anchorBody_2);
-			//pivotJoint2.ignore = true;
+			pivotJoint2.ignore = true;
 			pivotJoint2.space = space;
         }
  

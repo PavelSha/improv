@@ -16,7 +16,7 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'25.07.2013'</value>
+      <value>'30.07.2013'</value>
     </define>
     <define append="true">
       <name>CONFIG::air</name>
@@ -32,15 +32,15 @@
     </define>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
-      <path-element>C:\Documents and Settings\KS\My Documents\FD\NapeLearn\src</path-element>
+      <path-element>C:\Program Files\Git\NapeLearn\src</path-element>
       <path-element>C:\Program Files\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
     <library-path append="true">
-      <path-element>C:\Documents and Settings\KS\My Documents\FD\NapeLearn\lib\nape-dev.swc</path-element>
+      <path-element>C:\Program Files\Git\NapeLearn\lib\nape-dev.swc</path-element>
     </library-path>
   </compiler>
   <file-specs>
-    <path-element>C:\Documents and Settings\KS\My Documents\FD\NapeLearn\src\Main.as</path-element>
+    <path-element>C:\Program Files\Git\NapeLearn\src\Main.as</path-element>
   </file-specs>
   <default-background-color>#FFFFFF</default-background-color>
   <default-frame-rate>30</default-frame-rate>
