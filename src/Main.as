@@ -13,10 +13,11 @@ package
     import flash.display.Sprite;
     import flash.events.Event;
     import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
+	
 	import nape.constraint.Constraint;
 	import nape.geom.GeomPoly;
 	import nape.phys.Compound;
- 
     import nape.geom.Vec2;
     import nape.phys.Body;
     import nape.phys.BodyType;
@@ -37,9 +38,18 @@ package
 		private var _body_1:Body;
 		private var _body_2:Body;
 		private var _body_3:Body;
+		private var _temp:Body;
 		
 		private var pivotJoint1:PivotJoint;
 		private var pivotJoint2:PivotJoint;
+		
+		private var _isHeroOnGround:Boolean = true;
+
+		private var _heroSpeed:int = 20;
+
+		//
+		private var _isKeyPressed:Boolean = false;
+		private var _keyPressed:uint = 0;
 		
         public function Main():void {
             super();
@@ -72,8 +82,10 @@ package
              
             setUp();
  
-            stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+            stage.addEventListener(KeyboardEvent.KEY_DOWN, keyboardHandler);
+			stage.addEventListener(KeyboardEvent.KEY_UP, keyboardHandler);
             stage.addEventListener(Event.ENTER_FRAME, enterFrameHandler);
+			stage.addEventListener(Event.ENTER_FRAME, gameLoop);
         }
  
         private function setUp():void {
@@ -98,10 +110,20 @@ package
 			floor.position.setxy(0, h - 10);
             floor.space = space;
 			
-			var circle_radius:int = 15;
+			var wall_1:Body = new Body(BodyType.STATIC);
+            wall_1.shapes.add(new Polygon(Polygon.box(10, h / 2)));
+			wall_1.position.setxy(0, 3 * h / 4);
+            wall_1.space = space;
+			
+			var wall_2:Body = new Body(BodyType.STATIC);
+            wall_2.shapes.add(new Polygon(Polygon.box(10, h / 2)));
+			wall_2.position.setxy(w - 2, 3 * h / 4);
+            wall_2.space = space;
+			
+			var circle_radius:int = 20;
 			var box_x:int = 400;
-			var box_y:int = 40;
-			var box_width:int = 100;
+			var box_y:int = 240;
+			var box_width:int = 50;
 			var box_height:int = 10;
 			var material:Material = new Material(0.5);
 
@@ -116,14 +138,10 @@ package
 			//_body_2.userData = "Polygon body";
 			_body_2.space = space;
 
-			_body_3 = new Body(BodyType.DYNAMIC , new Vec2(box_y - 40, box_y));
+			_body_3 = new Body(BodyType.DYNAMIC , new Vec2(box_y + 40, box_y));
 			_body_3.shapes.add(new Circle(circle_radius, null, material));
 			//_body_2.userData = "Polygon body";
 			_body_3.space = space;
-			
-			/*var ground:Body = new Body(BodyType.STATIC, new Vec2(w / 2, h - 50));
-			ground.shapes.add(new Polygon(Polygon.box(w, 50), material));
-			ground.space = space;*/
 			
 			var anchorBody_1:Vec2;
 			var anchorBody_2:Vec2;
@@ -144,7 +162,7 @@ package
         private function enterFrameHandler(ev:Event):void {
             // Step forward in simulation by the required number of seconds.
             space.step(1 / (stage.frameRate + 50));
- 
+            gameLoop(ev);
             // Render Space to the debug draw.
             //   We first clear the debug screen,
             //   then draw the entire Space,
@@ -153,16 +171,93 @@ package
             debug.draw(space);
             debug.flush();
         }
- 
-        private function keyDownHandler(ev:KeyboardEvent):void {
-            if (ev.keyCode == 82) { // 'R'
-                // space.clear() removes all bodies (and constraints of
-                // which we have none) from the space.
-                space.clear();
- 
-                setUp();
-            }
-        }
+		
+		private function keyboardHandler(event:KeyboardEvent):void
+		{
+			if (event.type == KeyboardEvent.KEY_DOWN)
+			{
+				_isKeyPressed = true;
+				_keyPressed = event.keyCode;
+			}
+			else if (event.type == KeyboardEvent.KEY_UP)
+			{
+				 _isKeyPressed = false;
+			}
+		}
+
+		/**
+		 */
+		private function gameLoop(event:Event):void
+		{ 
+			/*_randomTimeForNextPrize--;
+
+			 if (_randomTimeForNextPrize <= 0)
+			 {
+				 _randomTimeForNextPrize = Math.random() * 1000;
+
+				 addPrizeToScene();
+			 }*/
+
+			// РћР±СЂР°Р±РѕС‚РєР° РєР»Р°РІРёР°С‚СѓСЂС‹
+
+			if (_isKeyPressed)
+			{
+				switch (_keyPressed)
+				{
+					case Keyboard.S:
+					{
+						if (_isHeroOnGround)
+						{
+							_body_2.velocity.x -= _heroSpeed;
+						}
+
+						break;
+					}
+
+					case Keyboard.W:
+					{
+						if (_isHeroOnGround)
+						{
+							_body_2.velocity.x += _heroSpeed;
+						}
+
+						break;
+					}
+
+					case Keyboard.A:
+					{
+						if (_isHeroOnGround)
+						{
+							_body_3.velocity.y = -_heroSpeed*7;
+						}
+
+						break;
+					}
+
+					case Keyboard.D:
+					{
+						if (_isHeroOnGround)
+						{
+							_body_3.velocity.y = +_heroSpeed*7;
+						}
+
+						break;
+					}
+					
+					case Keyboard.SPACE:
+					{
+						if (_isHeroOnGround)
+						{ trace("SPACE");
+							_temp = _body_2;
+							_body_2 = _body_3;
+							_body_3 = _temp;
+						}
+
+						break;
+					}
+				}
+			}
+		}
     }
 	
 }

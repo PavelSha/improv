@@ -1,2 +1,8 @@
-bin/NapeLearn.swf
-bin/js/swfobject.js
+bin/*
+obj*
+logs/*
+plugins/*
+templates/cache/*
+templates/compiled/*
+tmp/*
+uploads/*
